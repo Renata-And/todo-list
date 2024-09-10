@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { TaskType, Todolist } from './Todolist';
+import { TaskType, Todolist } from './components/Todolist';
 
 function App() {
 
@@ -12,9 +12,9 @@ function App() {
     { id: 3, isDone: false, title: 'React' }
   ];
   const tasks2: Array<TaskType> = [
-    { id: 4, isDone: true, title: 'milk' },
-    { id: 5, isDone: true, title: 'bread' },
-    { id: 6, isDone: false, title: 'juice' }
+    // { id: 4, isDone: true, title: 'Milk' },
+    // { id: 5, isDone: true, title: 'Bread' },
+    // { id: 6, isDone: false, title: 'Juice' }
   ];
 
   return (
