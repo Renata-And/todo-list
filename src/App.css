@@ -8,10 +8,44 @@
 }
 
 .todolist {
-  width: 210px;
+  width: 250px;
   padding: 15px;
   background-color: #6c6479;
   border: 2px solid #342846;
   border-radius: 10px;
   color: snow;
+}
+
+.button {
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  background-color: #342846;
+  color: snow;
+  text-transform: uppercase;
+}
+
+.button + .button {
+  margin-left: 10px;
+}
+
+.input {
+  height: 20px;
+  border-radius: 5px;
+}
+
+.tasks {
+  list-style: none;
+  padding: 0;
+}
+
+.checkbox {
+  accent-color: #342846;
+}
+
+.removeButton {
+  margin-left: 10px;
+  color: snow;
+  background-color: #342846;
+  border: none;
 }
