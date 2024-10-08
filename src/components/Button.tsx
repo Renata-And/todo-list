@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { ButtonHTMLAttributes } from 'react'
 
-type ButtonPropsType = {
-  title: string
-  onClick: () => void
-  isDisabled?: boolean
-}
+// type ButtonPropsType = {
+//   title: string
+//   onClick: () => void
+//   isDisabled?: boolean
+// }
 
-export const Button = ({ onClick, title, isDisabled }: ButtonPropsType) => {
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>
+
+export const Button = (props: ButtonProps) => {
   return (
-    <button className='button' onClick={onClick} disabled={isDisabled}>{title}</button>
+    <button className={props.className} onClick={props.onClick} disabled={props.disabled}>{props.title}</button>
   )
 }

@@ -26,6 +26,10 @@ function App() {
     const nextState: Array<TaskType> = [newTask, ...tasks];
     setTasks(nextState);
   }
+  const setTaskNewStatus = (taskId: string, newStatus: boolean) => {
+    const nextState = tasks.map(t => t.id === taskId ? { ...t, isDone: newStatus } : t)
+    setTasks(nextState);
+  }
 
   return (
     <div className='App'>
@@ -35,6 +39,7 @@ function App() {
         removeTask={removeTask}
         deleteAllTasks={deleteAllTasks}
         addTask={addTask}
+        setTaskNewStatus={setTaskNewStatus}
       />
     </div>
   );
