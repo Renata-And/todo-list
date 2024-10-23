@@ -1,14 +1,13 @@
 .App {
   padding: 30px;
   display: flex;
-}
-
-.App > div {
-  margin-right: 50px;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .todolist {
-  min-width: 300px;
+  max-width: 250px;
+  width: 100%;
   padding: 15px;
   background-color: #6c6479;
   border: 2px solid #342846;
@@ -47,7 +46,7 @@ button:active {
 }
 
 .input {
-  width: 85%;
+  width: 80%;
   height: 20px;
   border-radius: 5px;
 }
