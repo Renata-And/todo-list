@@ -1,8 +1,14 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react'
-import { Button } from './Button'
+import { ChangeEvent } from 'react'
 import { FilterValuesType } from '../App'
 import { AddItemForm } from './AddItemForm'
 import { EditableSpan } from './EditableSpan'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import DeleteIcon from '@mui/icons-material/Delete'
+import Checkbox from '@mui/material/Checkbox';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import { Box, Grid2, Typography } from '@mui/material'
 
 type TodolistPropsType = {
   listId: string
@@ -30,7 +36,7 @@ export const Todolist = ({ listId, title, listFilter, addTask, deleteAllTasks, r
   const tasksList: JSX.Element = tasks.length === 0
     ? <p>Tasks list is empty</p>
     : (
-      <ul className='tasks'>
+      <List className='tasks'>
         {tasks.map((t: TaskType) => {
           const removeTaskHandler = () => removeTask(t.id, listId);
           const setTaskNewStatusHandler = (e: ChangeEvent<HTMLInputElement>) => setTaskNewStatus(t.id, e.currentTarget.checked, listId);
@@ -38,23 +44,22 @@ export const Todolist = ({ listId, title, listFilter, addTask, deleteAllTasks, r
             changeTaskTitle(t.id, title, listId)
           }
           return (
-            <li key={t.id}>
-              <input
-                className='checkbox'
-                type="checkbox"
-                checked={t.isDone}
-                onChange={setTaskNewStatusHandler}
-              />
-              <EditableSpan title={t.title} changeTitle={changeTaskTitleHandler} className={t.isDone ? 'titleDone' : ''} />
-              <Button
-                className={'remove-button'}
-                title={'x'}
-                onClick={removeTaskHandler}
-              />
-            </li>
+            <ListItem
+              key={t.id}
+              sx={{ justifyContent: 'space-between', opacity: t.isDone ? 0.5 : 1 }}
+              disablePadding
+            >
+              <Box>
+                <Checkbox checked={t.isDone} onChange={setTaskNewStatusHandler} />
+                <EditableSpan title={t.title} changeTitle={changeTaskTitleHandler} className={t.isDone ? 'titleDone' : ''} />
+              </Box>
+              <IconButton aria-label="delete" onClick={removeTaskHandler} size='small'>
+                <DeleteIcon />
+              </IconButton>
+            </ListItem>
           )
         })}
-      </ul>
+      </List>
     )
 
   const addTaskHandler = (taskTitle: string) => addTask(taskTitle, listId);
@@ -69,40 +74,47 @@ export const Todolist = ({ listId, title, listFilter, addTask, deleteAllTasks, r
 
   return (
     <div className='todolist'>
-      <h3>
+      <Typography variant="h5" component="h3" textAlign={'center'} style={{ margin: '5px 0 15px 0' }}>
         <EditableSpan title={title} changeTitle={changeTodolistTitleHandler} />
-        <Button title={'x'} onClick={() => deleteTodolist(listId)} />
-      </h3>
+        <IconButton aria-label="delete" onClick={() => deleteTodolist(listId)}>
+          <DeleteIcon />
+        </IconButton>
+      </Typography>
       <AddItemForm addItem={addTaskHandler} />
       {tasksList}
-      <div>
+      <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
         <Button
-          title={'Delete all tasks'}
+          variant='contained'
+          size='small'
           onClick={deleteAllTasksHandler}
-        />
-      </div>
-      <div>
-        <Button
-          className={listFilter === 'all' ? 'button-active' : ''}
-          title={'All'}
-          onClick={() => changeTodolistFilterTaskHandler('all')}
-        />
-        <Button
-          className={listFilter === 'active' ? 'button-active' : ''}
-          title={'Active'}
-          onClick={() => changeTodolistFilterTaskHandler('active')}
-        />
-        <Button
-          className={listFilter === 'completed' ? 'button-active' : ''}
-          title={'Completed'}
-          onClick={() => changeTodolistFilterTaskHandler('completed')}
-        />
-        <Button
-          className={listFilter === 'firstThree' ? 'button-active' : ''}
-          title={'First three tasks'}
-          onClick={() => changeTodolistFilterTaskHandler('firstThree')}
-        />
-      </div>
+        >Delete all tasks</Button>
+        <Box display={'flex'} gap={'10px'} flexWrap={'wrap'}>
+          <Button
+            variant='contained'
+            size='small'
+            color={listFilter === 'all' ? 'secondary' : 'primary'}
+            onClick={() => changeTodolistFilterTaskHandler('all')}
+          >All</Button>
+          <Button
+            variant='contained'
+            size='small'
+            color={listFilter === 'active' ? 'secondary' : 'primary'}
+            onClick={() => changeTodolistFilterTaskHandler('active')}
+          >Active</Button>
+          <Button
+            variant='contained'
+            size='small'
+            color={listFilter === 'completed' ? 'secondary' : 'primary'}
+            onClick={() => changeTodolistFilterTaskHandler('completed')}
+          >Completed</Button>
+          <Button
+            variant='contained'
+            size='small'
+            color={listFilter === 'firstThree' ? 'secondary' : 'primary'}
+            onClick={() => changeTodolistFilterTaskHandler('firstThree')}
+          >First three tasks</Button>
+        </Box>
+      </Box>
     </div>
   )
 }
