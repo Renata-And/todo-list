@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { Box, Grid2, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 
 type TodolistPropsType = {
   listId: string
