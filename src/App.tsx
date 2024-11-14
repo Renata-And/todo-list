@@ -16,7 +16,7 @@ export type TodolistType = {
     title: string
     filter: FilterValuesType
 }
-export type TaskState = {
+export type TasksState = {
     [todolistId: string]: TaskType[]
 }
 export type FilterValuesType = 'all' | 'active' | 'completed' | 'firstThree'
@@ -37,7 +37,7 @@ function App() {
             filter: 'active',
         },
     ])
-    const [tasks, setTasks] = useState<TaskState>({
+    const [tasks, setTasks] = useState<TasksState>({
         [todolistId_1]: [
             {id: v1(), isDone: true, title: 'HTML&CSS'},
             {id: v1(), isDone: true, title: 'JS'},
@@ -108,7 +108,7 @@ function App() {
             title: title,
             filter: 'all'
         }
-        setTodolists([...todolists, newTodolist]);
+        setTodolists([newTodolist, ...todolists]);
         setTasks({...tasks, [todolistId]: []})
     }
 
