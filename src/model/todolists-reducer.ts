@@ -1,21 +1,10 @@
-import {FilterValuesType, TodolistType} from '../App';
-import {v1} from 'uuid';
+import { FilterValuesType, TodolistType } from '../app/App';
+import { v1 } from 'uuid';
 
-export const todolistId_1 = v1();
-export const todolistId_2 = v1();
+// export const todolistId_1 = v1();
+// export const todolistId_2 = v1();
 
-const initialState: TodolistType[] = [
-  {
-    id: todolistId_1,
-    title: 'What to learn',
-    filter: 'all'
-  },
-  {
-    id: todolistId_2,
-    title: 'What to buy',
-    filter: 'active'
-  }
-];
+const initialState: TodolistType[] = [];
 
 export const todolistsReducer = (state: TodolistType[] = initialState, action: TodolistsActionType): TodolistType[] => {
   switch (action.type) {
@@ -33,9 +22,9 @@ export const todolistsReducer = (state: TodolistType[] = initialState, action: T
         filter: action.payload.newFilter
       } : tl);
     case 'CHANGE_TODOLIST_TITLE':
-      return state.map(tl => tl.id === action.payload.todolistId ? {...tl, title: action.payload.title} : tl)
+      return state.map(tl => tl.id === action.payload.todolistId ? { ...tl, title: action.payload.title } : tl)
     default:
-      throw new Error('Incorrect action type');
+      return state;
   }
 }
 
@@ -53,15 +42,15 @@ type TodolistsActionType =
 
 // Action creators
 export const deleteTodolistAC = (todolistId: string) => {
-  return {type: 'DELETE_TODOLIST', payload: {todolistId}} as const
+  return { type: 'DELETE_TODOLIST', payload: { todolistId } } as const
 }
 export const addTodolistAC = (title: string) => {
-  return {type: 'ADD_TODOLIST', payload: {title, id: v1()}} as const
+  return { type: 'ADD_TODOLIST', payload: { title, id: v1() } } as const
 }
 export const changeTodolistFilterAC = (payload: { newFilter: FilterValuesType, todolistId: string }) => {
-  return {type: 'CHANGE_TODOLIST_FILTER', payload} as const
+  return { type: 'CHANGE_TODOLIST_FILTER', payload } as const
 }
 export const changeTodolistTitleAC = (payload: { title: string, todolistId: string }) => {
-  return {type: 'CHANGE_TODOLIST_TITLE', payload} as const
+  return { type: 'CHANGE_TODOLIST_TITLE', payload } as const
 }
 

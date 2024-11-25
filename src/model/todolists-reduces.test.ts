@@ -5,8 +5,8 @@ import {
   deleteTodolistAC,
   todolistsReducer
 } from './todolists-reducer'
-import {v1} from 'uuid'
-import {FilterValuesType, TodolistType} from '../App'
+import { v1 } from 'uuid'
+import { FilterValuesType, TodolistType } from '../app/App'
 
 let todolistId1: string;
 let todolistId2: string;
@@ -18,8 +18,8 @@ beforeEach(() => {
   todolistId2 = v1();
 
   startState = [
-    {id: todolistId1, title: 'What to learn', filter: 'all'},
-    {id: todolistId2, title: 'What to buy', filter: 'all'}
+    { id: todolistId1, title: 'What to learn', filter: 'all' },
+    { id: todolistId2, title: 'What to buy', filter: 'all' }
   ]
 })
 
@@ -40,7 +40,7 @@ test('correct todolist should be added', () => {
 
 test('todolist filter type should be changed correct', () => {
   const newFilter: FilterValuesType = 'completed'
-  const newState = todolistsReducer(startState, changeTodolistFilterAC({newFilter, todolistId: todolistId1}))
+  const newState = todolistsReducer(startState, changeTodolistFilterAC({ newFilter, todolistId: todolistId1 }))
 
   expect(newState[0].filter).toBe(newFilter)
   expect(newState[1].filter).toBe('all')
@@ -48,7 +48,7 @@ test('todolist filter type should be changed correct', () => {
 
 test('todolist title should be changed correct', () => {
   const newTitle = 'New title'
-  const endState = todolistsReducer(startState, changeTodolistTitleAC({title: newTitle, todolistId: todolistId2}))
+  const endState = todolistsReducer(startState, changeTodolistTitleAC({ title: newTitle, todolistId: todolistId2 }))
 
   expect(endState[0].title).toBe('What to learn')
   expect(endState[1].title).toBe(newTitle)

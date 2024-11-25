@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Button } from './Button'
-import { FilterValuesType } from '../App'
+import { FilterValuesType } from '../app/App'
 
 type TodolistPropsType = {
   title: string
