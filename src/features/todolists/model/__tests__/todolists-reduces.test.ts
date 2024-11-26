@@ -4,9 +4,9 @@ import {
   changeTodolistTitleAC,
   deleteTodolistAC,
   todolistsReducer
-} from './todolists-reducer'
+} from '../todolists-reducer'
 import { v1 } from 'uuid'
-import { FilterValuesType, TodolistType } from '../app/App'
+import type {FilterValuesType, TodolistType} from '../../../../app/App';
 
 let todolistId1: string;
 let todolistId2: string;
@@ -40,7 +40,7 @@ test('correct todolist should be added', () => {
 
 test('todolist filter type should be changed correct', () => {
   const newFilter: FilterValuesType = 'completed'
-  const newState = todolistsReducer(startState, changeTodolistFilterAC({ newFilter, todolistId: todolistId1 }))
+  const newState = todolistsReducer(startState, changeTodolistFilterAC({ filter: newFilter, todolistId: todolistId1 }))
 
   expect(newState[0].filter).toBe(newFilter)
   expect(newState[1].filter).toBe('all')
