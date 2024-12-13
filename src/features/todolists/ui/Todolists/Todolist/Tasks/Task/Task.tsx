@@ -1,6 +1,6 @@
 import {Box} from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
-import {EditableSpan} from '../../../../../../../common/components/EditableSpan/EditableSpan';
+import {EditableSpan} from 'common/components/EditableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ListItem from '@mui/material/ListItem';
@@ -35,7 +35,7 @@ export const Task = ({task, todolist}: Props) => {
     >
       <Box>
         <Checkbox checked={task.isDone} onChange={setTaskNewStatus}/>
-        <EditableSpan value={task.title} changeTitle={changeTaskTitle}
+        <EditableSpan value={task.title} onChange={changeTaskTitle}
                       className={task.isDone ? 'titleDone' : ''}/>
       </Box>
       <IconButton aria-label="delete" onClick={removeTask} size="small">
