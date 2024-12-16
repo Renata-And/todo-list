@@ -1,87 +1,122 @@
-import { TasksState } from '../../../app/App';
-import { v1 } from 'uuid';
-import type {AddTodolistActionType, DeleteTodolistActionType} from './todolists-reducer';
+import type { AddTodolistActionType, DeleteTodolistActionType } from "./todolists-reducer"
+import type { AppThunk } from "../../../app/store"
+import { tasksApi } from "../api/tasksApi"
+import type { DomainTask } from "../api/tasksApi.types"
+
+export type TasksState = {
+  [todolistId: string]: DomainTask[]
+}
 
 const initialState: TasksState = {}
 
 export const tasksReducer = (state: TasksState = initialState, action: TasksActionType): TasksState => {
   switch (action.type) {
-    case 'REMOVE_TASK': {
-      const { taskId, todolistId } = action.payload;
-      return {
-        ...state,
-        [todolistId]: state[todolistId].filter(t => t.id !== taskId)
-      };
+    case "GET_TASKS": {
+      const { todolistId, tasks } = action.payload
+      const stateCopy = { ...state }
+      stateCopy[todolistId] = tasks
+      return stateCopy
     }
-    case 'ADD_TASK': {
-      const { todolistId, title } = action.payload;
+    case "REMOVE_TASK": {
+      const { taskId, todolistId } = action.payload
       return {
         ...state,
-        [todolistId]: [{ id: v1(), title, isDone: false }, ...state[todolistId]]
+        [todolistId]: state[todolistId].filter((t) => t.id !== taskId),
       }
     }
-    case 'CHANGE_TASK_STATUS': {
-      const { todolistId, taskId, isDone } = action.payload;
+    case "ADD_TASK": {
+      const { task } = action.payload
       return {
         ...state,
-        [todolistId]: state[todolistId].map(t => t.id === taskId ? { ...t, isDone } : t)
+        [task.todoListId]: [task, ...state[task.todoListId]],
       }
     }
-    case 'CHANGE_TASK_TITLE': {
-      const { todolistId, taskId, title } = action.payload;
+    case "UPDATE_TASK": {
+      const { task } = action.payload
       return {
         ...state,
-        [todolistId]: state[todolistId].map(t => t.id === taskId ? { ...t, title } : t)
+        [task.todoListId]: state[task.todoListId].map((t) => (t.id === task.id ? task : t)),
       }
     }
-    case 'DELETE_ALL_TASKS': {
-      return {
-        ...state,
-        [action.todolistId]: []
-      }
-    }
-    case 'DELETE_TODOLIST': {
+    case "DELETE_TODOLIST": {
       const newState = { ...state }
       delete newState[action.payload.todolistId]
       return newState
     }
-    case 'ADD_TODOLIST': {
-      return { ...state, [action.payload.id]: [] }
+    case "ADD_TODOLIST": {
+      return { ...state, [action.payload.todolist.id]: [] }
     }
+    // case "DELETE_ALL_TASKS": {
+    //   return {
+    //     ...state,
+    //     [action.todolistId]: [],
+    //   }
+    // }
     default:
-      return state;
+      return state
   }
 }
 
+// Action creators
+export const getTasksAC = (payload: { todolistId: string; tasks: DomainTask[] }) => {
+  return { type: "GET_TASKS", payload } as const
+}
+export const removeTaskAC = (payload: { todolistId: string; taskId: string }) => {
+  return { type: "REMOVE_TASK", payload } as const
+}
+export const addTaskAC = (payload: { task: DomainTask }) => {
+  return { type: "ADD_TASK", payload } as const
+}
+export const updateTaskAC = (payload: { task: DomainTask }) => {
+  return { type: "UPDATE_TASK", payload } as const
+}
+// export const deleteAllTasksAC = (todolistId: string) => {
+//   return { type: "DELETE_ALL_TASKS", todolistId } as const
+// }
+
+// Thunk
+export const fetchTasksTC =
+  (id: string): AppThunk =>
+  (dispatch) => {
+    tasksApi.getTasks(id).then((res) => {
+      dispatch(getTasksAC({ todolistId: id, tasks: res.data.items }))
+    })
+  }
+export const removeTaskTC =
+  (payload: { todolistId: string; taskId: string }): AppThunk =>
+  (dispatch) => {
+    tasksApi.deleteTask(payload).then(() => {
+      dispatch(removeTaskAC(payload))
+    })
+  }
+export const addTaskTC =
+  (payload: { todolistId: string; title: string }): AppThunk =>
+  (dispatch) => {
+    tasksApi.createTask(payload).then((res) => {
+      dispatch(addTaskAC({ task: res.data.data.item }))
+    })
+  }
+export const updateTaskTC =
+  (payload: { task: DomainTask }): AppThunk =>
+  (dispatch) => {
+    const { task } = payload
+    tasksApi.updateTask({ taskId: task.id, todolistId: task.todoListId, model: task }).then((res) => {
+      dispatch(updateTaskAC({ task: res.data.data.item }))
+    })
+  }
+
 // Actions types
-type removeTaskActionType = ReturnType<typeof removeTaskAC>
-type addTaskActionType = ReturnType<typeof addTaskAC>
-type changeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
-type changeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
-type deleteAllTasksActionType = ReturnType<typeof deleteAllTasksAC>
+type GetTasksActionType = ReturnType<typeof getTasksAC>
+type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
+type AddTaskActionType = ReturnType<typeof addTaskAC>
+type UpdateTaskActionType = ReturnType<typeof updateTaskAC>
+// type DeleteAllTasksActionType = ReturnType<typeof deleteAllTasksAC>
 
 type TasksActionType =
-  removeTaskActionType
-  | addTaskActionType
-  | changeTaskStatusActionType
-  | changeTaskTitleActionType
+  | RemoveTaskActionType
+  | AddTaskActionType
+  | UpdateTaskActionType
   | DeleteTodolistActionType
   | AddTodolistActionType
-  | deleteAllTasksActionType
-
-// Action creators
-export const removeTaskAC = (payload: { todolistId: string, taskId: string }) => {
-  return { type: 'REMOVE_TASK', payload } as const
-}
-export const addTaskAC = (payload: { todolistId: string, title: string }) => {
-  return { type: 'ADD_TASK', payload } as const
-}
-export const changeTaskStatusAC = (payload: { todolistId: string, taskId: string, isDone: boolean }) => {
-  return { type: 'CHANGE_TASK_STATUS', payload } as const
-}
-export const changeTaskTitleAC = (payload: { todolistId: string, taskId: string, title: string }) => {
-  return { type: 'CHANGE_TASK_TITLE', payload } as const
-}
-export const deleteAllTasksAC = (todolistId: string) => {
-  return { type: 'DELETE_ALL_TASKS', todolistId } as const
-}
+  | GetTasksActionType
+// | DeleteAllTasksActionType

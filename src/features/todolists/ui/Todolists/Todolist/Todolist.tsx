@@ -1,13 +1,13 @@
-import { AddItemForm } from 'common/components';
-import { TodolistTitle } from './TodolistTitle/TodolistTitle';
-import { FilterTasksButtons } from './FilterTasksButtons/FilterTasksButtons';
-import { Tasks } from './Tasks/Tasks';
-import { addTaskAC } from '../../../model/tasks-reducer';
-import { useAppDispatch } from '../../../../../app/hooks';
-import type { TodolistType } from '../../../../../app/App';
+import { AddItemForm } from "common/components"
+import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
+import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
+import { Tasks } from "./Tasks/Tasks"
+import { addTaskTC } from "../../../model/tasks-reducer"
+import { useAppDispatch } from "../../../../../app/hooks"
+import type { DomainTodolist } from "../../../model/todolists-reducer"
 
 type Props = {
-  todolist: TodolistType
+  todolist: DomainTodolist
 }
 
 export type TaskType = {
@@ -18,8 +18,9 @@ export type TaskType = {
 
 export const Todolist = ({ todolist }: Props) => {
   const dispatch = useAppDispatch()
+
   const addTask = (taskTitle: string) => {
-    dispatch(addTaskAC({ title: taskTitle, todolistId: todolist.id }))
+    dispatch(addTaskTC({ title: taskTitle, todolistId: todolist.id }))
   }
 
   return (
