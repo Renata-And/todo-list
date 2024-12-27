@@ -1,6 +1,6 @@
 import { useAppSelector } from "./hooks"
 import { CssBaseline, ThemeProvider } from "@mui/material"
-import { Header } from "common/components"
+import { ErrorSnackBar, Header } from "common/components"
 import { Main } from "./Main"
 import { getTheme } from "common/theme"
 import { selectThemeMode } from "./app-selectors"
@@ -15,6 +15,7 @@ function AppWithRedux() {
         <CssBaseline />
         <Header />
         <Main />
+        <ErrorSnackBar />
       </ThemeProvider>
     </div>
   )

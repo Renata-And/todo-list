@@ -32,20 +32,23 @@ export const Task = ({ task, todolist }: Props) => {
     dispatch(updateTaskTC({ task: newTask }))
   }
 
+  const disabled = todolist.entityStatus === "loading"
+
   return (
     <ListItem
       sx={{ justifyContent: "space-between", opacity: task.status === TaskStatus.Completed ? 0.5 : 1 }}
       disablePadding
     >
       <Box>
-        <Checkbox checked={task.status === TaskStatus.Completed} onChange={setTaskNewStatus} />
+        <Checkbox checked={task.status === TaskStatus.Completed} onChange={setTaskNewStatus} disabled={disabled} />
         <EditableSpan
           value={task.title}
           onChange={changeTaskTitle}
           className={task.status === TaskStatus.Completed ? "titleDone" : ""}
+          disabled={disabled}
         />
       </Box>
-      <IconButton aria-label="delete" onClick={removeTask} size="small">
+      <IconButton aria-label="delete" onClick={removeTask} size="small" disabled={disabled}>
         <DeleteIcon />
       </IconButton>
     </ListItem>
