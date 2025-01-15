@@ -1,11 +1,11 @@
 import { useAppSelector } from "./hooks"
 import { CssBaseline, ThemeProvider } from "@mui/material"
 import { ErrorSnackBar, Header } from "common/components"
-import { Main } from "./Main"
 import { getTheme } from "common/theme"
 import { selectThemeMode } from "./app-selectors"
+import { Routing } from "common/routing"
 
-function AppWithRedux() {
+export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
   const theme = getTheme(themeMode)
 
@@ -14,13 +14,9 @@ function AppWithRedux() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Header />
-        <Main />
+        <Routing />
         <ErrorSnackBar />
       </ThemeProvider>
     </div>
   )
 }
-
-export default AppWithRedux
-
-export class TasksState {}

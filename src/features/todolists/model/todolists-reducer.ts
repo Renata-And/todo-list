@@ -106,6 +106,7 @@ export const deleteTodolistTC =
       })
       .catch((err) => {
         handleServerNetworkError(err, dispatch)
+        dispatch(changeTodolistEntityStatusAC({ id, status: "failed" }))
       })
   }
 export const changeTodolistTitleTC =
