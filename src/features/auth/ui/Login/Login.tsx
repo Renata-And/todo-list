@@ -6,13 +6,18 @@ import FormGroup from "@mui/material/FormGroup"
 import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import { getTheme } from "common/theme"
-import { useAppSelector } from "../../../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 import { selectThemeMode } from "../../../../app/app-selectors"
 import Grid from "@mui/material/Grid2"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 import s from "./Login.module.css"
+import { loginTC } from "../../model/auth-reducer"
+import { selectIsLoggedIn } from "../../model/auth-selectors"
+import { useEffect } from "react"
+import { useNavigate } from "react-router"
+import { PATH } from "common/routing"
 
-type Inputs = {
+export type Inputs = {
   email: string
   password: string
   rememberMe: boolean
@@ -20,8 +25,10 @@ type Inputs = {
 
 export const Login = () => {
   const themeMode = useAppSelector(selectThemeMode)
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const dispatch = useAppDispatch()
   const theme = getTheme(themeMode)
-
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -29,11 +36,16 @@ export const Login = () => {
     control,
     formState: { errors },
   } = useForm<Inputs>({ defaultValues: { email: "", password: "", rememberMe: false } })
-
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
+    dispatch(loginTC(data))
     reset()
   }
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate(PATH.MAIN)
+    }
+  }, [isLoggedIn])
 
   return (
     <Grid container justifyContent={"center"}>

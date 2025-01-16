@@ -1,4 +1,4 @@
-import type { AddTodolistActionType, DeleteTodolistActionType } from "./todolists-reducer"
+import type { AddTodolistActionType, ClearTodosData, DeleteTodolistActionType } from "./todolists-reducer"
 import type { AppThunk } from "../../../app/store"
 import { tasksApi } from "../api/tasksApi"
 import type { DomainTask } from "../api/tasksApi.types"
@@ -48,14 +48,11 @@ export const tasksReducer = (state: TasksState = initialState, action: TasksActi
       return newState
     }
     case "ADD_TODOLIST": {
+      debugger
       return { ...state, [action.payload.todolist.id]: [] }
     }
-    // case "DELETE_ALL_TASKS": {
-    //   return {
-    //     ...state,
-    //     [action.todolistId]: [],
-    //   }
-    // }
+    case "CLEAR_DATA":
+      return {}
     default:
       return state
   }
@@ -74,9 +71,6 @@ export const addTaskAC = (payload: { task: DomainTask }) => {
 export const updateTaskAC = (payload: { task: DomainTask }) => {
   return { type: "UPDATE_TASK", payload } as const
 }
-// export const deleteAllTasksAC = (todolistId: string) => {
-//   return { type: "DELETE_ALL_TASKS", todolistId } as const
-// }
 
 // Thunk
 export const fetchTasksTC =
@@ -154,7 +148,6 @@ type GetTasksActionType = ReturnType<typeof getTasksAC>
 type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
 type AddTaskActionType = ReturnType<typeof addTaskAC>
 type UpdateTaskActionType = ReturnType<typeof updateTaskAC>
-// type DeleteAllTasksActionType = ReturnType<typeof deleteAllTasksAC>
 
 type TasksActionType =
   | RemoveTaskActionType
@@ -163,4 +156,4 @@ type TasksActionType =
   | DeleteTodolistActionType
   | AddTodolistActionType
   | GetTasksActionType
-// | DeleteAllTasksActionType
+  | ClearTodosData

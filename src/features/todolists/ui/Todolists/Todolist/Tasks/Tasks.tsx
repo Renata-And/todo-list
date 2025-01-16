@@ -1,10 +1,8 @@
 import List from "@mui/material/List"
-import { useAppDispatch, useAppSelector } from "../../../../../../app/hooks"
+import { useAppSelector } from "../../../../../../app/hooks"
 import { Task } from "./Task/Task"
 import { selectTasks } from "../../../../model/tasks-selectors"
 import type { DomainTodolist } from "../../../../model/todolists-reducer"
-import { useEffect } from "react"
-import { fetchTasksTC } from "../../../../model/tasks-reducer"
 import type { DomainTask } from "../../../../api/tasksApi.types"
 import { TaskStatus } from "common/enums/TaskStatus"
 
@@ -14,11 +12,6 @@ type Props = {
 
 export const Tasks = ({ todolist }: Props) => {
   const tasks = useAppSelector(selectTasks)
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    dispatch(fetchTasksTC(todolist.id))
-  }, [])
 
   let filteredTasks: DomainTask[] = tasks[todolist.id]
   switch (todolist.filter) {
