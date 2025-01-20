@@ -2,9 +2,9 @@ import { AddItemForm } from "common/components"
 import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
 import { Tasks } from "./Tasks/Tasks"
-import { addTaskTC } from "../../../model/tasks-reducer"
+import { addTaskTC } from "../../../model/tasksSlice"
 import { useAppDispatch } from "../../../../../app/hooks"
-import type { DomainTodolist } from "../../../model/todolists-reducer"
+import type { DomainTodolist } from "../../../model/todolistsSlice"
 
 type Props = {
   todolist: DomainTodolist

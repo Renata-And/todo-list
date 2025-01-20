@@ -2,12 +2,11 @@ import { useAppDispatch, useAppSelector } from "./hooks"
 import { CircularProgress, CssBaseline, ThemeProvider } from "@mui/material"
 import { ErrorSnackBar, Header } from "common/components"
 import { getTheme } from "common/theme"
-import { selectThemeMode } from "./app-selectors"
 import { Routing } from "common/routing"
 import { useEffect } from "react"
-import { initializeAppTC } from "../features/auth/model/auth-reducer"
-import { selectIsInitialized } from "../features/auth/model/auth-selectors"
+import { initializeAppTC, selectIsInitialized } from "../features/auth/model/authSlice"
 import s from "./App.module.css"
+import { selectThemeMode } from "./appSlice"
 
 export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)

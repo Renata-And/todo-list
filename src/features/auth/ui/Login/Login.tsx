@@ -7,15 +7,14 @@ import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import { getTheme } from "common/theme"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { selectThemeMode } from "../../../../app/app-selectors"
 import Grid from "@mui/material/Grid2"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 import s from "./Login.module.css"
-import { loginTC } from "../../model/auth-reducer"
-import { selectIsLoggedIn } from "../../model/auth-selectors"
+import { loginTC, selectIsLoggedIn } from "../../model/authSlice"
 import { useEffect } from "react"
 import { useNavigate } from "react-router"
 import { PATH } from "common/routing"
+import { selectThemeMode } from "../../../../app/appSlice"
 
 export type Inputs = {
   email: string

@@ -1,8 +1,7 @@
 import Button from "@mui/material/Button"
 import { Box } from "@mui/material"
-import { changeTodolistFilterAC, type DomainTodolist, type FilterValuesType } from "../../../../model/todolists-reducer"
+import { changeTodolistFilter, type DomainTodolist, type FilterValuesType } from "../../../../model/todolistsSlice"
 import { useAppDispatch } from "../../../../../../app/hooks"
-// import { deleteAllTasksAC } from "../../../../model/tasks-reducer"
 
 type Props = {
   todolist: DomainTodolist
@@ -11,24 +10,18 @@ type Props = {
 export const FilterTasksButtons = ({ todolist }: Props) => {
   const dispatch = useAppDispatch()
 
-  const changeTodolistFilter = (filter: FilterValuesType) => {
-    dispatch(changeTodolistFilterAC({ filter, todolistId: todolist.id }))
+  const changeTodolistFilterHandler = (filter: FilterValuesType) => {
+    dispatch(changeTodolistFilter({ id: todolist.id, filter }))
   }
-  // const deleteAllTasks = () => {
-  //   dispatch(deleteAllTasksAC(todolist.id))
-  // }
 
   return (
     <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
-      {/*<Button variant="contained" size="small" onClick={deleteAllTasks}>*/}
-      {/*  Delete all tasks*/}
-      {/*</Button>*/}
       <Box display={"flex"} gap={"10px"} flexWrap={"wrap"}>
         <Button
           variant="contained"
           size="small"
           color={todolist.filter === "all" ? "secondary" : "primary"}
-          onClick={() => changeTodolistFilter("all")}
+          onClick={() => changeTodolistFilterHandler("all")}
         >
           All
         </Button>
@@ -36,7 +29,7 @@ export const FilterTasksButtons = ({ todolist }: Props) => {
           variant="contained"
           size="small"
           color={todolist.filter === "active" ? "secondary" : "primary"}
-          onClick={() => changeTodolistFilter("active")}
+          onClick={() => changeTodolistFilterHandler("active")}
         >
           Active
         </Button>
@@ -44,7 +37,7 @@ export const FilterTasksButtons = ({ todolist }: Props) => {
           variant="contained"
           size="small"
           color={todolist.filter === "completed" ? "secondary" : "primary"}
-          onClick={() => changeTodolistFilter("completed")}
+          onClick={() => changeTodolistFilterHandler("completed")}
         >
           Completed
         </Button>
@@ -52,7 +45,7 @@ export const FilterTasksButtons = ({ todolist }: Props) => {
           variant="contained"
           size="small"
           color={todolist.filter === "firstThree" ? "secondary" : "primary"}
-          onClick={() => changeTodolistFilter("firstThree")}
+          onClick={() => changeTodolistFilterHandler("firstThree")}
         >
           First three tasks
         </Button>

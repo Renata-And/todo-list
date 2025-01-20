@@ -12,8 +12,8 @@ export const todolistsApi = {
   removeTodolist: (id: string) => {
     return instance.delete<BaseResponse>(`todo-lists/${id}`)
   },
-  updateTodolist: (payload: { todolistId: string; title: string }) => {
-    const { todolistId, title } = payload
-    return instance.put<BaseResponse>(`todo-lists/${todolistId}`, { title })
+  updateTodolist: (payload: { id: string; title: string }) => {
+    const { id, title } = payload
+    return instance.put<BaseResponse>(`todo-lists/${id}`, { title })
   },
 }
