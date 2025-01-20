@@ -5,7 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import ListItem from "@mui/material/ListItem"
 import { EditableSpan } from "common/components/EditableSpan/EditableSpan"
 import { ChangeEvent } from "react"
-import { removeTaskTC, updateTaskTC } from "../../../../../model/tasksSlice"
+import { updateTask, removeTask } from "../../../../../model/tasksSlice"
 import { useAppDispatch } from "../../../../../../../app/hooks"
 import type { DomainTodolist } from "../../../../../model/todolistsSlice"
 import type { DomainTask } from "../../../../../api/tasksApi.types"
@@ -19,17 +19,17 @@ type Props = {
 export const Task = ({ task, todolist }: Props) => {
   const dispatch = useAppDispatch()
 
-  const removeTask = () => {
-    dispatch(removeTaskTC({ taskId: task.id, todolistId: todolist.id }))
+  const removeTaskHandler = () => {
+    dispatch(removeTask({ taskId: task.id, todolistId: todolist.id }))
   }
   const setTaskNewStatus = (e: ChangeEvent<HTMLInputElement>) => {
     const status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
     const newTask = { ...task, status }
-    dispatch(updateTaskTC({ task: newTask }))
+    dispatch(updateTask({ task: newTask }))
   }
   const changeTaskTitle = (title: string) => {
     const newTask = { ...task, title }
-    dispatch(updateTaskTC({ task: newTask }))
+    dispatch(updateTask({ task: newTask }))
   }
 
   const disabled = todolist.entityStatus === "loading"
@@ -48,7 +48,7 @@ export const Task = ({ task, todolist }: Props) => {
           disabled={disabled}
         />
       </Box>
-      <IconButton aria-label="delete" onClick={removeTask} size="small" disabled={disabled}>
+      <IconButton aria-label="delete" onClick={removeTaskHandler} size="small" disabled={disabled}>
         <DeleteIcon />
       </IconButton>
     </ListItem>

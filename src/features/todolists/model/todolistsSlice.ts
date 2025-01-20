@@ -5,8 +5,9 @@ import { type RequestStatus, setAppStatus } from "../../../app/appSlice"
 import { ResultCode } from "common/enums"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { handleServerAppError } from "common/utils/handleServerAppError"
-import { fetchTasksTC } from "./tasksSlice"
 import { createSlice } from "@reduxjs/toolkit"
+import { clearTasksAndTodolists } from "common/actions/common.actions"
+import { fetchTasks } from "./tasksSlice"
 
 export type FilterValuesType = "all" | "active" | "completed" | "firstThree"
 
@@ -52,10 +53,12 @@ export const todolistsSlice = createSlice({
         state.push({ ...todo, filter: "all", entityStatus: "idle" })
       })
     }),
-    clearTodolists: create.reducer(() => {
-      return []
-    }),
   }),
+  extraReducers: (builder) => {
+    builder.addCase(clearTasksAndTodolists, (state, action) => {
+      return action.payload.todolists
+    })
+  },
   selectors: {
     selectTodolists: (state) => state,
   },
@@ -67,7 +70,6 @@ export const {
   changeTodolistEntityStatus,
   changeTodolistFilter,
   changeTodolistTitle,
-  clearTodolists,
   setTodolists,
   deleteTodolist,
 } = todolistsSlice.actions
@@ -85,7 +87,7 @@ export const fetchTodolistsTC = (): AppThunk => (dispatch) => {
     })
     .then((todolists) => {
       todolists.forEach((tl) => {
-        dispatch(fetchTasksTC(tl.id))
+        dispatch(fetchTasks(tl.id))
       })
     })
     .catch((err) => {
