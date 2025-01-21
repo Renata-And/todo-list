@@ -1,6 +1,5 @@
 import type { Todolist } from "../api/todolistsApi.types"
 import { todolistsApi } from "../api/todolistsApi"
-import type { AppThunk } from "../../../app/store"
 import { type RequestStatus, setAppStatus } from "../../../app/appSlice"
 import { ResultCode } from "common/enums"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
