@@ -7,7 +7,7 @@ import Switch from "@mui/material/Switch"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import { changeTheme, selectAppStatus, selectThemeMode } from "../../../app/appSlice"
 import { LinearProgress } from "@mui/material"
-import { logoutTC, selectIsLoggedIn } from "../../../features/auth/model/authSlice"
+import { selectIsLoggedIn, setIsLoggedOut } from "../../../features/auth/model/authSlice"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -20,7 +20,7 @@ export const Header = () => {
   }
 
   const logoutHandler = () => {
-    dispatch(logoutTC())
+    dispatch(setIsLoggedOut())
   }
 
   return (

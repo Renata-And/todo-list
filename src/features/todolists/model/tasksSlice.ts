@@ -125,10 +125,10 @@ export const tasksSlice = createSliceWithThunks({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(addTodolist, (state, action) => {
+      .addCase(addTodolist.fulfilled, (state, action) => {
         state[action.payload.todolist.id] = []
       })
-      .addCase(deleteTodolist, (state, action) => {
+      .addCase(deleteTodolist.fulfilled, (state, action) => {
         delete state[action.payload.id]
       })
       .addCase(clearTasksAndTodolists, (state, action) => {

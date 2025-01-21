@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 import Grid from "@mui/material/Grid2"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 import s from "./Login.module.css"
-import { loginTC, selectIsLoggedIn } from "../../model/authSlice"
+import { selectIsLoggedIn, setIsLoggedIn } from "../../model/authSlice"
 import { useEffect } from "react"
 import { useNavigate } from "react-router"
 import { PATH } from "common/routing"
@@ -36,7 +36,7 @@ export const Login = () => {
     formState: { errors },
   } = useForm<Inputs>({ defaultValues: { email: "", password: "", rememberMe: false } })
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    dispatch(loginTC(data))
+    dispatch(setIsLoggedIn({ data }))
     reset()
   }
 

@@ -1,12 +1,12 @@
 import { Container, Grid2 } from "@mui/material"
 import { AddItemForm } from "common/components"
 import { Todolists } from "../features/todolists/ui/Todolists/Todolists"
-import { addTodolistTC } from "../features/todolists/model/todolistsSlice"
 import { useAppDispatch, useAppSelector } from "./hooks"
 import { useNavigate } from "react-router"
 import { useEffect } from "react"
 import { PATH } from "common/routing"
 import { selectIsLoggedIn } from "../features/auth/model/authSlice"
+import { addTodolist } from "../features/todolists/model/todolistsSlice"
 
 export const Main = () => {
   const dispatch = useAppDispatch()
@@ -19,13 +19,13 @@ export const Main = () => {
     }
   }, [isLoggedIn])
 
-  const addTodolist = (title: string) => {
-    dispatch(addTodolistTC(title))
+  const addTodolistHandler = (title: string) => {
+    dispatch(addTodolist({ title }))
   }
   return (
     <Container>
       <Grid2 container sx={{ p: "15px 0" }}>
-        <AddItemForm addItem={addTodolist} />
+        <AddItemForm addItem={addTodolistHandler} />
       </Grid2>
       <Grid2 container spacing={2}>
         <Todolists />

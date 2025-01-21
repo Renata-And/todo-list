@@ -4,7 +4,7 @@ import { ErrorSnackBar, Header } from "common/components"
 import { getTheme } from "common/theme"
 import { Routing } from "common/routing"
 import { useEffect } from "react"
-import { initializeAppTC, selectIsInitialized } from "../features/auth/model/authSlice"
+import { initializeApp, selectIsInitialized } from "../features/auth/model/authSlice"
 import s from "./App.module.css"
 import { selectThemeMode } from "./appSlice"
 
@@ -15,7 +15,7 @@ export const App = () => {
   const theme = getTheme(themeMode)
 
   useEffect(() => {
-    dispatch(initializeAppTC())
+    dispatch(initializeApp())
   }, [])
 
   if (!isInitialized) {
