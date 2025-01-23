@@ -3,20 +3,33 @@ import { CircularProgress, CssBaseline, ThemeProvider } from "@mui/material"
 import { ErrorSnackBar, Header } from "common/components"
 import { getTheme } from "common/theme"
 import { Routing } from "common/routing"
-import { useEffect } from "react"
-import { initializeApp, selectIsInitialized } from "../features/auth/model/authSlice"
+import { useEffect, useState } from "react"
 import s from "./App.module.css"
 import { selectThemeMode } from "./appSlice"
+import { useMeQuery } from "../features/auth/api/authAPI"
+import { ResultCode } from "common/enums"
+import { setIsLoggedIn } from "../features/auth/model/authSlice"
 
 export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
-  const isInitialized = useAppSelector(selectIsInitialized)
   const dispatch = useAppDispatch()
-  const theme = getTheme(themeMode)
+  // const isInitialized = useAppSelector(selectIsInitialized)
+
+  const [isInitialized, setIsInitialized] = useState(false)
+  const { isLoading, data } = useMeQuery()
+
+  // useEffect(() => {
+  //   dispatch(initializeApp())
+  // }, [])
 
   useEffect(() => {
-    dispatch(initializeApp())
-  }, [])
+    if (!isLoading) {
+      setIsInitialized(true)
+      if (data?.resultCode === ResultCode.Success) {
+        dispatch(setIsLoggedIn({ isLoggedIn: true }))
+      }
+    }
+  }, [isLoading, data])
 
   if (!isInitialized) {
     return (
@@ -28,7 +41,7 @@ export const App = () => {
 
   return (
     <div className="App">
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={getTheme(themeMode)}>
         <CssBaseline />
         <Header />
         <Routing />

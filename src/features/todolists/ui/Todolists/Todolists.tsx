@@ -1,20 +1,13 @@
 import { Todolist } from "./Todolist/Todolist"
 import { Grid2, Paper } from "@mui/material"
-import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import { useEffect } from "react"
-import { fetchTodolists, selectTodolists } from "../../model/todolistsSlice"
+import { useGetTodolistsQuery } from "../../api/todolistsApi"
 
 export const Todolists = () => {
-  const todolists = useAppSelector(selectTodolists)
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    dispatch(fetchTodolists())
-  }, [])
+  const data = useGetTodolistsQuery()
 
   return (
     <>
-      {todolists.map((tl) => (
+      {data.data?.map((tl) => (
         <Grid2 sx={{ width: "300px" }} key={tl.id}>
           <Paper elevation={4} sx={{ p: "15px" }}>
             <Todolist todolist={tl} />
