@@ -3,11 +3,11 @@ import { Grid2, Paper } from "@mui/material"
 import { useGetTodolistsQuery } from "../../api/todolistsApi"
 
 export const Todolists = () => {
-  const data = useGetTodolistsQuery()
+  const { data: todolists } = useGetTodolistsQuery()
 
   return (
     <>
-      {data.data?.map((tl) => (
+      {todolists?.map((tl) => (
         <Grid2 sx={{ width: "300px" }} key={tl.id}>
           <Paper elevation={4} sx={{ p: "15px" }}>
             <Todolist todolist={tl} />

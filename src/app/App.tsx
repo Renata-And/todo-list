@@ -5,22 +5,16 @@ import { getTheme } from "common/theme"
 import { Routing } from "common/routing"
 import { useEffect, useState } from "react"
 import s from "./App.module.css"
-import { selectThemeMode } from "./appSlice"
+import { selectThemeMode, setIsLoggedIn } from "./appSlice"
 import { useMeQuery } from "../features/auth/api/authAPI"
 import { ResultCode } from "common/enums"
-import { setIsLoggedIn } from "../features/auth/model/authSlice"
 
 export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
   const dispatch = useAppDispatch()
-  // const isInitialized = useAppSelector(selectIsInitialized)
 
   const [isInitialized, setIsInitialized] = useState(false)
   const { isLoading, data } = useMeQuery()
-
-  // useEffect(() => {
-  //   dispatch(initializeApp())
-  // }, [])
 
   useEffect(() => {
     if (!isLoading) {
@@ -29,7 +23,7 @@ export const App = () => {
         dispatch(setIsLoggedIn({ isLoggedIn: true }))
       }
     }
-  }, [isLoading, data])
+  }, [isLoading, data, dispatch])
 
   if (!isInitialized) {
     return (

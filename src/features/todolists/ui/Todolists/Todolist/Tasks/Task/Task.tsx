@@ -5,11 +5,10 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import ListItem from "@mui/material/ListItem"
 import { EditableSpan } from "common/components/EditableSpan/EditableSpan"
 import { ChangeEvent } from "react"
-import { updateTask, removeTask } from "../../../../../model/tasksSlice"
-import { useAppDispatch } from "../../../../../../../app/hooks"
 import type { DomainTodolist } from "../../../../../model/todolistsSlice"
 import type { DomainTask } from "../../../../../api/tasksApi.types"
 import { TaskStatus } from "common/enums/TaskStatus"
+import { useRemoveTaskMutation, useUpdateTaskMutation } from "../../../../../api/tasksApi"
 
 type Props = {
   task: DomainTask
@@ -17,19 +16,20 @@ type Props = {
 }
 
 export const Task = ({ task, todolist }: Props) => {
-  const dispatch = useAppDispatch()
+  const [removeTask] = useRemoveTaskMutation()
+  const [updateTask] = useUpdateTaskMutation()
 
   const removeTaskHandler = () => {
-    dispatch(removeTask({ taskId: task.id, todolistId: todolist.id }))
+    removeTask({ taskId: task.id, todolistId: todolist.id })
   }
   const setTaskNewStatus = (e: ChangeEvent<HTMLInputElement>) => {
     const status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
     const newTask = { ...task, status }
-    dispatch(updateTask({ task: newTask }))
+    updateTask({ todolistId: todolist.id, taskId: task.id, model: newTask })
   }
   const changeTaskTitle = (title: string) => {
     const newTask = { ...task, title }
-    dispatch(updateTask({ task: newTask }))
+    updateTask({ todolistId: todolist.id, taskId: task.id, model: newTask })
   }
 
   const disabled = todolist.entityStatus === "loading"

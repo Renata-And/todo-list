@@ -1,4 +1,4 @@
-import { tasksApi } from "../api/tasksApi"
+import { _tasksApi } from "../api/tasksApi"
 import type { DomainTask } from "../api/tasksApi.types"
 import { setAppStatus } from "../../../app/appSlice"
 import { ResultCode } from "common/enums"
@@ -24,7 +24,7 @@ export const tasksSlice = createSliceWithThunks({
         async (id: string, { dispatch, rejectWithValue }) => {
           try {
             dispatch(setAppStatus({ status: "loading" }))
-            const res = await tasksApi.getTasks(id)
+            const res = await _tasksApi.getTasks(id)
             dispatch(setAppStatus({ status: "succeeded" }))
             return { todolistId: id, tasks: res.data.items }
           } catch (err) {
@@ -42,7 +42,7 @@ export const tasksSlice = createSliceWithThunks({
         async (payload: { todolistId: string; taskId: string }, { dispatch, rejectWithValue }) => {
           try {
             dispatch(setAppStatus({ status: "loading" }))
-            const res = await tasksApi.deleteTask(payload)
+            const res = await _tasksApi.deleteTask(payload)
             if (res.data.resultCode === ResultCode.Success) {
               dispatch(setAppStatus({ status: "succeeded" }))
               return payload
@@ -69,7 +69,7 @@ export const tasksSlice = createSliceWithThunks({
         async (payload: { todolistId: string; title: string }, { dispatch, rejectWithValue }) => {
           try {
             dispatch(setAppStatus({ status: "loading" }))
-            const res = await tasksApi.createTask(payload)
+            const res = await _tasksApi.createTask(payload)
             if (res.data.resultCode === ResultCode.Success) {
               dispatch(setAppStatus({ status: "succeeded" }))
               return { task: res.data.data.item }
@@ -93,7 +93,7 @@ export const tasksSlice = createSliceWithThunks({
         async (payload: { task: DomainTask }, { dispatch, rejectWithValue }) => {
           try {
             dispatch(setAppStatus({ status: "loading" }))
-            const res = await tasksApi.updateTask({
+            const res = await _tasksApi.updateTask({
               taskId: payload.task.id,
               todolistId: payload.task.todoListId,
               model: payload.task,

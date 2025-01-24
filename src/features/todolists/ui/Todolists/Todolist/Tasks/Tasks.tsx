@@ -1,28 +1,27 @@
 import List from "@mui/material/List"
-import { useAppSelector } from "../../../../../../app/hooks"
 import { Task } from "./Task/Task"
 import type { DomainTodolist } from "../../../../model/todolistsSlice"
 import type { DomainTask } from "../../../../api/tasksApi.types"
 import { TaskStatus } from "common/enums/TaskStatus"
-import { selectTasks } from "../../../../model/tasksSlice"
+import { useGetTasksQuery } from "../../../../api/tasksApi"
 
 type Props = {
   todolist: DomainTodolist
 }
 
 export const Tasks = ({ todolist }: Props) => {
-  const tasks = useAppSelector(selectTasks)
+  const { data } = useGetTasksQuery(todolist.id)
 
-  let filteredTasks: DomainTask[] = tasks[todolist.id]
+  let filteredTasks = data?.items
   switch (todolist.filter) {
     case "active":
-      filteredTasks = filteredTasks.filter((t) => t.status === TaskStatus.New)
+      filteredTasks = filteredTasks?.filter((t) => t.status === TaskStatus.New)
       break
     case "completed":
-      filteredTasks = filteredTasks.filter((t) => t.status === TaskStatus.Completed)
+      filteredTasks = filteredTasks?.filter((t) => t.status === TaskStatus.Completed)
       break
     case "firstThree":
-      filteredTasks = filteredTasks.filter((t, i) => i === 0 || i === 1 || i === 2)
+      filteredTasks = filteredTasks?.filter((t, i) => i === 0 || i === 1 || i === 2)
       break
   }
 

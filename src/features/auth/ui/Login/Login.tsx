@@ -10,11 +10,12 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 import Grid from "@mui/material/Grid2"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 import s from "./Login.module.css"
-import { loginTC, selectIsLoggedIn } from "../../model/authSlice"
 import { useEffect } from "react"
 import { useNavigate } from "react-router"
 import { PATH } from "common/routing"
-import { selectThemeMode } from "../../../../app/appSlice"
+import { selectIsLoggedIn, selectThemeMode, setIsLoggedIn } from "../../../../app/appSlice"
+import { useLoginMutation } from "../../api/authAPI"
+import { ResultCode } from "common/enums"
 
 export type Inputs = {
   email: string
@@ -35,9 +36,17 @@ export const Login = () => {
     control,
     formState: { errors },
   } = useForm<Inputs>({ defaultValues: { email: "", password: "", rememberMe: false } })
+
+  const [login] = useLoginMutation()
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    dispatch(loginTC(data))
-    reset()
+    login(data).then((res) => {
+      if (res.data?.resultCode === ResultCode.Success) {
+        dispatch(setIsLoggedIn({ isLoggedIn: true }))
+        localStorage.setItem("sn-token", res.data.data.token)
+      }
+      reset()
+    })
   }
 
   useEffect(() => {
