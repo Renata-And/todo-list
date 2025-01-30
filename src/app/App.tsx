@@ -11,9 +11,9 @@ import { ResultCode } from "common/enums"
 
 export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
+  const [isInitialized, setIsInitialized] = useState(false)
   const dispatch = useAppDispatch()
 
-  const [isInitialized, setIsInitialized] = useState(false)
   const { isLoading, data } = useMeQuery()
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const App = () => {
         dispatch(setIsLoggedIn({ isLoggedIn: true }))
       }
     }
-  }, [isLoading, data, dispatch])
+  }, [isLoading, data])
 
   if (!isInitialized) {
     return (

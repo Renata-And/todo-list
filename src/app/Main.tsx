@@ -2,22 +2,18 @@ import { Container, Grid2 } from "@mui/material"
 import { AddItemForm } from "common/components"
 import { Todolists } from "../features/todolists/ui/Todolists/Todolists"
 import { useAppSelector } from "./hooks"
-import { useNavigate } from "react-router"
-import { useEffect } from "react"
+import { Navigate } from "react-router"
 import { PATH } from "common/routing"
-import { useCreateTodolistMutation } from "../features/todolists/api/todolistsApi"
 import { selectIsLoggedIn } from "./appSlice"
+import { useAddTodolistMutation } from "../features/todolists/api/todolistsApi"
 
 export const Main = () => {
-  const navigate = useNavigate()
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
-  const [createTodolist] = useCreateTodolistMutation()
+  const [createTodolist] = useAddTodolistMutation()
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate(PATH.LOGIN)
-    }
-  }, [isLoggedIn, navigate])
+  if (!isLoggedIn) {
+    return <Navigate to={PATH.LOGIN} />
+  }
 
   const addTodolistHandler = (title: string) => {
     createTodolist(title)

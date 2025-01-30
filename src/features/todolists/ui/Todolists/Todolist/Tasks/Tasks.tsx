@@ -1,16 +1,16 @@
 import List from "@mui/material/List"
 import { Task } from "./Task/Task"
-import type { DomainTodolist } from "../../../../model/todolistsSlice"
-import type { DomainTask } from "../../../../api/tasksApi.types"
 import { TaskStatus } from "common/enums/TaskStatus"
 import { useGetTasksQuery } from "../../../../api/tasksApi"
+import { TasksSkeleton } from "../../../skeletons/TasksSkeleton/TasksSkeleton"
+import type { DomainTask, DomainTodolist } from "../../../../lib/types"
 
 type Props = {
   todolist: DomainTodolist
 }
 
 export const Tasks = ({ todolist }: Props) => {
-  const { data } = useGetTasksQuery(todolist.id)
+  const { data, isLoading } = useGetTasksQuery(todolist.id)
 
   let filteredTasks = data?.items
   switch (todolist.filter) {
@@ -23,6 +23,10 @@ export const Tasks = ({ todolist }: Props) => {
     case "firstThree":
       filteredTasks = filteredTasks?.filter((t, i) => i === 0 || i === 1 || i === 2)
       break
+  }
+
+  if (isLoading) {
+    return <TasksSkeleton />
   }
 
   return (

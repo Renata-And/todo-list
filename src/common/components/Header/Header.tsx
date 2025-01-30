@@ -9,7 +9,7 @@ import { changeTheme, selectAppStatus, selectIsLoggedIn, selectThemeMode, setIsL
 import { LinearProgress } from "@mui/material"
 import { useLogoutMutation } from "../../../features/auth/api/authAPI"
 import { ResultCode } from "common/enums"
-import { clearTasksAndTodolists } from "common/actions/common.actions"
+import { baseApi } from "../../../app/baseApi"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -19,17 +19,21 @@ export const Header = () => {
   const [logout] = useLogoutMutation()
 
   const changeThemeMode = () => {
-    dispatch(changeTheme({ theme: themeMode === "light" ? "dark" : "light" }))
+    dispatch(changeTheme({ themeMode: themeMode === "light" ? "dark" : "light" }))
   }
 
   const logoutHandler = () => {
-    logout().then((res) => {
-      if (res.data?.resultCode === ResultCode.Success) {
-        dispatch(setIsLoggedIn({ isLoggedIn: false }))
-        localStorage.removeItem("sn-token")
-        dispatch(clearTasksAndTodolists({ todolists: [], tasks: {} }))
-      }
-    })
+    logout()
+      .then((res) => {
+        if (res.data?.resultCode === ResultCode.Success) {
+          dispatch(setIsLoggedIn({ isLoggedIn: false }))
+          localStorage.removeItem("sn-token")
+        }
+      })
+      .then(() => {
+        // dispatch(baseApi.util.resetApiState()) - удаляет весь кэш
+        dispatch(baseApi.util.invalidateTags(["Todolist", "Task"])) // зачищает все запросы с этими тегами
+      })
   }
 
   return (

@@ -5,10 +5,9 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import ListItem from "@mui/material/ListItem"
 import { EditableSpan } from "common/components/EditableSpan/EditableSpan"
 import { ChangeEvent } from "react"
-import type { DomainTodolist } from "../../../../../model/todolistsSlice"
-import type { DomainTask } from "../../../../../api/tasksApi.types"
 import { TaskStatus } from "common/enums/TaskStatus"
 import { useRemoveTaskMutation, useUpdateTaskMutation } from "../../../../../api/tasksApi"
+import type { DomainTask, DomainTodolist } from "../../../../../lib/types"
 
 type Props = {
   task: DomainTask

@@ -2,8 +2,8 @@ import { AddItemForm } from "common/components"
 import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
 import { Tasks } from "./Tasks/Tasks"
-import type { DomainTodolist } from "../../../model/todolistsSlice"
-import { useCreateTaskMutation } from "../../../api/tasksApi"
+import { useAddTaskMutation } from "../../../api/tasksApi"
+import type { DomainTodolist } from "../../../lib/types"
 
 type Props = {
   todolist: DomainTodolist
@@ -16,7 +16,7 @@ export type TaskType = {
 }
 
 export const Todolist = ({ todolist }: Props) => {
-  const [createTask] = useCreateTaskMutation()
+  const [createTask] = useAddTaskMutation()
 
   const addTaskHandler = (taskTitle: string) => {
     createTask({ title: taskTitle, todolistId: todolist.id })

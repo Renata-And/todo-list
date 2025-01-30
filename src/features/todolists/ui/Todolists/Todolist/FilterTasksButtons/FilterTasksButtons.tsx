@@ -1,17 +1,26 @@
 import Button from "@mui/material/Button"
 import { Box } from "@mui/material"
-import { changeTodolistFilter, type DomainTodolist, type FilterValuesType } from "../../../../model/todolistsSlice"
 import { useAppDispatch } from "../../../../../../app/hooks"
+import { todolistsApi } from "../../../../api/todolistsApi"
+import type { DomainTodolist, FilterValues } from "../../../../lib/types"
 
 type Props = {
   todolist: DomainTodolist
 }
 
 export const FilterTasksButtons = ({ todolist }: Props) => {
+  const { id, filter } = todolist
   const dispatch = useAppDispatch()
 
-  const changeTodolistFilterHandler = (filter: FilterValuesType) => {
-    dispatch(changeTodolistFilter({ id: todolist.id, filter }))
+  const changeTodolistFilterHandler = (filter: FilterValues) => {
+    dispatch(
+      todolistsApi.util.updateQueryData("getTodolists", undefined, (todolists) => {
+        const todolist = todolists.find((tl) => tl.id === id)
+        if (todolist) {
+          todolist.filter = filter
+        }
+      }),
+    )
   }
 
   return (
@@ -20,7 +29,7 @@ export const FilterTasksButtons = ({ todolist }: Props) => {
         <Button
           variant="contained"
           size="small"
-          color={todolist.filter === "all" ? "secondary" : "primary"}
+          color={filter === "all" ? "secondary" : "primary"}
           onClick={() => changeTodolistFilterHandler("all")}
         >
           All
@@ -28,7 +37,7 @@ export const FilterTasksButtons = ({ todolist }: Props) => {
         <Button
           variant="contained"
           size="small"
-          color={todolist.filter === "active" ? "secondary" : "primary"}
+          color={filter === "active" ? "secondary" : "primary"}
           onClick={() => changeTodolistFilterHandler("active")}
         >
           Active
@@ -36,7 +45,7 @@ export const FilterTasksButtons = ({ todolist }: Props) => {
         <Button
           variant="contained"
           size="small"
-          color={todolist.filter === "completed" ? "secondary" : "primary"}
+          color={filter === "completed" ? "secondary" : "primary"}
           onClick={() => changeTodolistFilterHandler("completed")}
         >
           Completed

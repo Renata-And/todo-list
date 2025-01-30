@@ -1,10 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit"
-import type { LoginArgs } from "../features/auth/api/authApi.types"
-import type { Dispatch } from "redux"
-import { _authApi } from "../features/auth/api/authAPI"
-import { ResultCode } from "common/enums"
-import { handleServerAppError, handleServerNetworkError } from "common/utils"
-import { clearTasksAndTodolists } from "common/actions/common.actions"
+import { createSlice, isFulfilled, isPending, isRejected } from "@reduxjs/toolkit"
+import { todolistsApi } from "../features/todolists/api/todolistsApi"
+import { tasksApi } from "../features/todolists/api/tasksApi"
 
 export type ThemeMode = "dark" | "light"
 export type RequestStatus = "idle" | "loading" | "succeeded" | "failed"
@@ -18,8 +14,8 @@ export const appSlice = createSlice({
     isLoggedIn: false,
   },
   reducers: (create) => ({
-    changeTheme: create.reducer<{ theme: ThemeMode }>((state, action) => {
-      state.themeMode = action.payload.theme
+    changeTheme: create.reducer<{ themeMode: ThemeMode }>((state, action) => {
+      state.themeMode = action.payload.themeMode
     }),
     setAppStatus: create.reducer<{ status: RequestStatus }>((state, action) => {
       state.status = action.payload.status
@@ -31,6 +27,24 @@ export const appSlice = createSlice({
       state.isLoggedIn = action.payload.isLoggedIn
     }),
   }),
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(isPending, (state, action) => {
+        if (
+          todolistsApi.endpoints.getTodolists.matchPending(action) ||
+          tasksApi.endpoints.getTasks.matchPending(action)
+        ) {
+          return
+        }
+        state.status = "loading"
+      })
+      .addMatcher(isFulfilled, (state) => {
+        state.status = "succeeded"
+      })
+      .addMatcher(isRejected, (state) => {
+        state.status = "failed"
+      })
+  },
   selectors: {
     selectThemeMode: (state) => state.themeMode,
     selectAppStatus: (state) => state.status,
@@ -39,43 +53,6 @@ export const appSlice = createSlice({
   },
 })
 
-export const appReducer = appSlice.reducer
 export const { changeTheme, setAppError, setAppStatus, setIsLoggedIn } = appSlice.actions
-export const { selectThemeMode, selectAppStatus, selectAppError, selectIsLoggedIn } = appSlice.selectors
-
-export const loginTC = (data: LoginArgs) => (dispatch: Dispatch) => {
-  dispatch(setAppStatus({ status: "loading" }))
-  _authApi
-    .login(data)
-    .then((res) => {
-      if (res.data.resultCode === ResultCode.Success) {
-        dispatch(setAppStatus({ status: "succeeded" }))
-        dispatch(setIsLoggedIn({ isLoggedIn: true }))
-        localStorage.setItem("sn-token", res.data.data.token)
-      } else {
-        handleServerAppError(res.data, dispatch)
-      }
-    })
-    .catch((error) => {
-      handleServerNetworkError(error, dispatch)
-    })
-}
-
-export const logoutTC = () => (dispatch: Dispatch) => {
-  dispatch(setAppStatus({ status: "loading" }))
-  _authApi
-    .logout()
-    .then((res) => {
-      if (res.data.resultCode === ResultCode.Success) {
-        localStorage.removeItem("sn-token")
-        dispatch(clearTasksAndTodolists({ todolists: [], tasks: {} }))
-        dispatch(setAppStatus({ status: "succeeded" }))
-        return { isLoggedIn: false }
-      } else {
-        handleServerAppError(res.data, dispatch)
-      }
-    })
-    .catch((err) => {
-      handleServerNetworkError(err, dispatch)
-    })
-}
+export const { selectAppStatus, selectAppError, selectThemeMode, selectIsLoggedIn } = appSlice.selectors
+export const appReducer = appSlice.reducer
